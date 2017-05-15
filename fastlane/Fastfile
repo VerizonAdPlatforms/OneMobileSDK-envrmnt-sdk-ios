@@ -1,0 +1,22 @@
+import 'build scripts/cocoapods.rb'
+import 'build scripts/github_release.rb'
+
+lane :sync_podspec do
+  release = get_latest_release(repo_name: "aol-public/OneMobileSDK-envrmnt-sdk-ios")
+
+  asset = release["assets"].select { |asset| asset["name"] == "VRSDK.framework.zip" }.first
+  asset_url = asset["browser_download_url"]
+  version = release["tag_name"]
+  podspec = "EnvrmntSDK.podspec"
+
+  Dir.chdir("..") do
+    update_podspec(
+      podspec: podspec,
+      version: version,
+      asset_url: asset_url)
+    deploy_podspec(
+      podspec: podspec,
+      spec_repo_name: "onemobile-sdk-podspecs",
+      spec_repo_url: "https://#{ENV["GITHUB_API_TOKEN"]}@github.com/vidible/OneMobileSDK-releases.git")
+  end
+end
