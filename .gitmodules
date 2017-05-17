@@ -1,0 +1,3 @@
+[submodule "fastlane/build scripts"]
+	path = fastlane/build scripts
+	url = git@github.com:aol-public/OneMobileSDK-build-scripts-ios.git
